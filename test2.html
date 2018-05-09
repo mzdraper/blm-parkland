@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Display a map with a custom style</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+
+        .markerBLM {
+            background-image: url('black/blm.png');
+            background-size: cover;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+          }
+
+          .markerSDHS {
+            background-image: url('parkland/hs-logo.png');
+            background-size: cover;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+          }
+
+          .markerBlue {
+            background-image: url('blue/blue.png');
+            background-size: cover;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+          }
+
+          .markerALM {
+            background-image: url('all/alm.png');
+            background-size: cover;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+          }
+
+          .mapboxgl-popup {
+            max-width: 370px;
+            height: 160px;
+          }
+    
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: 'Courier';
+          }
+    </style>
+</head>
+<body>
+
+<div id='map'></div>
+
+<script>
+
+mapboxgl.accessToken = 'pk.eyJ1IjoibWFkaXpoZW4iLCJhIjoiY2lzbTViZ2ozMDAyejJ5bzFxaXB0MXN2eCJ9.YVS0Rlj7IjNHireL_ysr6w';
+
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/madizhen/cjfezavwj0i4e2so2tfy0z9iw', 
+    center: [-104.995221, 39.739718],
+    zoom: 3
+});
+ 
+var geojsonBLM =
+	{
+	    type: 'FeatureCollection',
+	    features: [{
+	        type: 'Feature',
+	        geometry: {
+	          type: 'Point',
+	          coordinates: [-81.786491, 32.420200] /* Coordiantes where your marker will appear. */
+	        },
+	        properties: {
+	          description: '<a href="https://twitter.com/marleyymee/status/752549191457595392" target="_blank"><img width="350" height="150" src="black/marleyymee.png"</a>'
+	        }
+	    },
+	    {
+	        type: 'Feature',
+	        geometry: {
+	          type: 'Point',
+	          coordinates: [-76.638496, 39.300143]
+	        },
+	        properties: {
+	          description: '<a href="https://twitter.com/churchboy27/status/752476705038753792?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.huffingtonpost.com%2Fentry%2F21-tweets-that-show-why-saying-all-lives-matter-is-bullst_us_5783d147e4b01edea78eda7e&tfw_creator=_tarynitup&tfw_site=blackvoices" target="_blank"><img width="350" height="400" src="black/churchboy27.png"></a>'
+	        }
+	    },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-86.921206, 40.423664]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/rgay/status/966381473317117952" target="_blank"><img width="350" height="150" src="black/blm-roxane.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-88.249417, 41.730768]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/CoachTaeGibbs/status/751088921614819328?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.huffingtonpost.com%2Fentry%2F21-tweets-that-show-why-saying-all-lives-matter-is-bullst_us_5783d147e4b01edea78eda7e&tfw_creator=_tarynitup&tfw_site=blackvoices" target="_blank"><img width="350" height="175" src="black/coachtaegibbs.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-81.143316, 28.845696]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/_IAint_NoG00d/status/752390715531857921" target="_blank"><img width="350" height="400" src="black/bugaboo.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-87.608377, 41.691970]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/_eighteenplus/status/752380821781286912?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.huffingtonpost.com%2Fentry%2F21-tweets-that-show-why-saying-all-lives-matter-is-bullst_us_5783d147e4b01edea78eda7e&tfw_creator=_tarynitup&tfw_site=blackvoices" target="_blank"><img width="350" height="200" src="black/eighteen.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-88.309023, 44.517183]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/MrJeromeTrammel/status/752550686294933504?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.huffingtonpost.com%2Fentry%2F21-tweets-that-show-why-saying-all-lives-matter-is-bullst_us_5783d147e4b01edea78eda7e&tfw_creator=_tarynitup&tfw_site=blackvoices" target="_blank"><img width="350" height="175" src="black/trammel.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-83.066120, 42.304509]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/ShayOJay/status/751475849099116544?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.huffingtonpost.com%2Fentry%2F21-tweets-that-show-why-saying-all-lives-matter-is-bullst_us_5783d147e4b01edea78eda7e&tfw_creator=_tarynitup&tfw_site=blackvoices" target="_blank"><img width="350" height="200" src="black/sharon.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-81.660012, 41.329151]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/arthur_affect/status/538014928448524288" target="_blank"><img width="350" height="200" src="black/arthur.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-122.219441, 37.776692]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/BlakeDontCrack/status/644316059160317952" target="_blank"><img width="350" height="200" src="black/brotha.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-72.580539, 44.262535]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/berniesanders/status/676546220593045505?lang=en" target="_blank"><img width="350" height="200" src="black/bernie.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-73.756054, 42.649849]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/hillaryclinton/status/751133678269587456?lang=en" target="_blank"><img width="350" height="200" src="black/clinton.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-76.998954, 38.884979]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/cmclymer/status/984917432094502912" target="_blank"><img width="350" height="450" src="black/clymer.png"></a>'
+          }
+      }
+      ]
+	};
+
+var geojsonBlue =
+  {
+      type: 'FeatureCollection',
+      features: [{
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-79.979970, 32.775695] 
+          },
+          properties: {
+            description: '<a href="https://twitter.com/Li64417826/status/972595388023754753" target="_blank"><img width="350" height="150" src="blue/limmie.png"</a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-82.438837, 28.218482]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/JasonCCroft/status/982161459504283648" target="_blank"><img width="350" height="150" src="blue/jason.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-70.297766, 41.698739]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/bluelivesmtr/status/984611698706468867" target="_blank"><img width="350" height="400" src="blue/bluek9.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-117.982688, 33.676643]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/pammyjean7/status/982102995847409670" target="_blank"><img width="350" height="400" src="blue/pammy.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-121.879571, 37.333538]
+          },
+          properties: {
+            description: '<a href="hhttp://sanfrancisco.cbslocal.com/2016/11/23/san-jose-police-union-blue-lives-matter-psa-upsets-community-members/" target="_blank"><img width="350" height="200" src="blue/philipw.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-112.046342, 41.204284]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/USMC_CPD296/status/982418045858557953" target="_blank"><img width="350" height="400" src="blue/usmc.png"></a>'
+          }
+      }
+      ]
+  };
+
+var geojsonALM =
+  {
+      type: 'FeatureCollection',
+      features: [{
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-118.464398, 34.089897] 
+          },
+          properties: {
+            description: '<a href="https://twitter.com/benshapiro/status/695622179874967552?lang=en" target="_blank"><img width="350" height="150" src="alm/bens.png"</a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-94.768739, 30.452682]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/bonnieparker443/status/753779934825447424" target="_blank"><img width="350" height="150" src="all/rye.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-97.302131, 37.697806]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/MrsAlyssaP/status/751924552574263300" target="_blank"><img width="350" height="125" src="all/alyssap.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-86.741066, 36.173634]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/EricFromSpfld/status/924303647260934145" target="_blank"><img width="350" height="175" src="all/eric.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-90.052367, 35.141030]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/OpposingBlue/status/894283768651014144" target="_blank"><img width="350" height="400" src="all/nashlaw.png"></a>'
+          }
+      }
+      ]
+  };
+
+
+var geojsonSDHS =
+  {
+      type: 'FeatureCollection',
+      features: [{
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-80.203015, 26.189321] 
+          },
+          properties: {
+            description: '<a href="https://twitter.com/lauraloomer/status/965512397279694848?lang=en" target="_blank"><img width="350" height="400" src="parkland/laura.png"</a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-80.269521, 26.304522]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/morganw_44/status/965198475540549632?lang=en" target="_blank"><img width="350" height="350" src="parkland/morgan.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-80.188177, 25.808979]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/PERSlSTERS/status/983910129006497794" target="_blank"><img width="350" height="200" src="parkland/miami.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-80.267845, 26.303950]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/EVRYBODYvsTRUMP/status/983507652234924032" target="_blank"><img width="350" height="450" src="parkland/blackvoices.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-73.847891, 40.892603]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/Cadilla/status/982379126765117446" target="_blank"><img width="350" height="300" src="parkland/bunny.png"></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-80.325415, 26.158175]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/HealthCoachJaye/status/982377969523019776" target="_blank"><img width="350" height="450" src="parkland/broadway.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-118.393955, 34.131299]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/KimKardashian/status/963931384178925568?ref_src=twsrc%5Etfw&ref_url=https%3A%2F%2Fwww.teenvogue.com%2Fstory%2Fcelebrity-gun-control-florida-shooting&tfw_site=teenvogue" target="_blank"><img width="350" height="200" src="parkland/kimk.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-84.487392, 38.038814]
+          },
+          properties: {
+            description: '<a href="https://www.theguardian.com/us-news/2018/mar/23/george-clooney-to-parkland-students-you-make-me-proud-of-my-country-again" target="_blank"><img width="350" height="400" src="parkland/clooney.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-107.862006, 37.964222]
+          },
+          properties: {
+            description: '<a href="http://blackyouthproject.com/oprahs-500k-support-of-the-parkland-students-is-a-raw-reminder-of-her-lack-of-support-for-black-lives/" target="_blank"><img width="350" height="250" src="parkland/oprah.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-123.061181, 49.255790]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/charlesadler/status/991712444568420353" target="_blank"><img width="350" height="400" src="parkland/alder.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-79.046864, 35.904706]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/TimABC11/status/979484075651149824" target="_blank"><img width="350" height="400" src="parkland/unc.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-90.583575, 41.520216]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/HolleSharon/status/977768733715451905" target="_blank"><img width="350" height="400" src="parkland/iowa.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-90.208150, 38.616878]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/lizhess44/status/977578711707942913" target="_blank"><img width="350" height="400" src="parkland/ill.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-90.208150, 38.616878]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/BennettCartoons/status/976456110159908864" target="_blank"><img width="350" height="400" src="parkland/clay.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-78.875575, 42.877749]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/adamzyglis/status/975425124605231110" target="_blank"><img width="350" height="475" src="parkland/cartoon.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-80.008554, 40.453189]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/StephStrasburg/status/973982338706280448" target="_blank"><img width="350" height="500" src="parkland/twelve.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-80.008554, 40.453189]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/Sifill_LDF/status/973922677265182720" target="_blank"><img width="350" height="500" src="parkland/penn.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-74.193142, 40.099856]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/sbarchenger/status/973922022052024321" target="_blank"><img width="350" height="500" src="parkland/poster.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-122.072101, 37.694440]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/RepSwalwell/status/971475229972291584" target="_blank"><img width="350" height="200" src="parkland/erics.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-111.890137, 40.757224]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/AlienGurudeva/status/970863005599645697" target="_blank"><img width="350" height="200" src="parkland/moregirl.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-88.022831, 43.082550]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/AlienGurudeva/status/970863005599645697" target="_blank"><img width="350" height="200" src="parkland/david.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-88.022831, 43.082550]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/abroaddus/status/966405431613517824" target="_blank"><img width="350" height="200" src="parkland/minnea.png"></img></a>'
+          }
+      },
+      {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [-73.983927, 40.774096]
+          },
+          properties: {
+            description: '<a href="https://twitter.com/GeorgeTakei/status/963886490660032514?ref_src=twsrc%5Etfw&ref_url=http%3A%2F%2Fhollywoodlife.com%2F2018%2F02%2F14%2Fcelebs-react-florida-school-shooting-victims-twitter-tweets%2F&tfw_site=HollywoodLife" target="_blank"><img width="350" height="450" src="parkland/georget.png"></img></a>'
+          }
+      }
+      ]
+  };
+
+geojsonBLM.features.forEach(function(marker) {
+
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'markerBLM';
+
+  // make a marker for each feature and add to the map
+new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<p>' + marker.properties.description + '<p>'))
+  .addTo(map);
+});
+
+geojsonALM.features.forEach(function(marker) {
+
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'markerALM';
+
+  // make a marker for each feature and add to the map
+new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<p>' + marker.properties.description + '<p>'))
+  .addTo(map);
+});
+
+geojsonBlue.features.forEach(function(marker) {
+
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'markerBlue';
+
+  // make a marker for each feature and add to the map
+new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<p>' + marker.properties.description + '<p>'))
+  .addTo(map);
+});
+
+geojsonSDHS.features.forEach(function(marker) {
+
+  // create a HTML element for each feature
+  var el = document.createElement('div');
+  el.className = 'markerSDHS';
+
+  // make a marker for each feature and add to the map
+new mapboxgl.Marker(el)
+  .setLngLat(marker.geometry.coordinates)
+  .setPopup(new mapboxgl.Popup({ offset: 25 }) // add popups
+  .setHTML('<p>' + marker.properties.description + '<p>'))
+  .addTo(map);
+});
+
+</script>
+
+</body>
+</html>
